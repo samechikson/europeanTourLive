@@ -1,3 +1,5 @@
+#!/usr/bin/env /Users/sechikson/.nvm/versions/node/v8.4.0/bin/node
+
 const Xray = require('x-ray');
 var xray = Xray({
   filters: {
@@ -7,6 +9,7 @@ var xray = Xray({
   }
 });
 const baseURL = 'http://www.europeantour.com';
+let tournamentURL = '';
 
 const Nightmare = require('nightmare')
 const nightmare = Nightmare()
@@ -16,7 +19,10 @@ nightmare
   .click('#LiveLeaderboardLink a')
   .wait('#leaderboard-table')
   .wait(5000)
-  .evaluate(() => document.getElementById('fullPlayers').innerHTML)
+  .evaluate(() => {
+    tournamentURL = window.location.href;
+    return document.getElementById('fullPlayers').innerHTML;
+  })
   .end()
   .then(data => {
     xray(data, 'tr.lb-tablerow', [{
@@ -42,7 +48,9 @@ function printLeaderboard(leaderboard) {
       prevScore = parseInt(player.totalScore);
       pos++;
     }
-    console.log(`${pos}: ${player.name}    ${player.totalScore} \n`);
+    console.log(`${pos}: ${player.name}    ${player.totalScore} | color=black \n`);
   })
+  console.log('---');
+  console.log(`Full Leaderboard | href=${tournamentURL}`)
   
 }
