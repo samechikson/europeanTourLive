@@ -14,6 +14,9 @@ let tournamentURL = '';
 const Nightmare = require('nightmare')
 const nightmare = Nightmare()
 
+console.log('🏌🏼European Tour');
+console.log('---');
+
 const session = nightmare
   .goto(baseURL)
   .click('#LiveLeaderboardLink a')
@@ -33,12 +36,14 @@ const session = nightmare
     });
   })
   .catch(error => {
-    console.error('Search failed:', error)
+    if (error.message.includes('.wait() for #leaderboard-table timed out after 30000msec')) {
+      console.log('No Active Tournament | color=black');
+    } else {
+      console.error('Search failed:', error);
+    }
   });
 
 function printLeaderboard(leaderboard) {
-  console.log('European Tour');
-  console.log('---');
   leaderboard = leaderboard.slice(0, 10);
   let prevScore = -1000, pos = 0;
   leaderboard.forEach((player, i) => {
@@ -50,5 +55,4 @@ function printLeaderboard(leaderboard) {
   })
   console.log('---');
   console.log('Full Leaderboard')
-  
 }
