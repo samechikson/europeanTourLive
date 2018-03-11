@@ -14,29 +14,27 @@ let tournamentURL = '';
 const Nightmare = require('nightmare')
 const nightmare = Nightmare()
 
-nightmare
+const session = nightmare
   .goto(baseURL)
   .click('#LiveLeaderboardLink a')
   .wait('#leaderboard-table')
   .wait(5000)
-  .evaluate(() => {
-    tournamentURL = window.location.href;
-    return document.getElementById('fullPlayers').innerHTML;
-  })
+  .evaluate(() => document.getElementById('fullPlayers').innerHTML)
   .end()
   .then(data => {
     xray(data, 'tr.lb-tablerow', [{
       position: '.player-pos | clean',
       name: '.lb-player-name | clean',
       todayScore: '.lb-today',
-      totalScore: '.lb-topar'
+      totalScore: '.lb-topar',
+      hole: '.lb-hole'
     }])((err, players) => {
       printLeaderboard(players)
     });
   })
   .catch(error => {
     console.error('Search failed:', error)
-  })
+  });
 
 function printLeaderboard(leaderboard) {
   console.log('European Tour');
@@ -48,9 +46,9 @@ function printLeaderboard(leaderboard) {
       prevScore = parseInt(player.totalScore);
       pos++;
     }
-    console.log(`${pos}: ${player.name}    ${player.totalScore} | color=black \n`);
+    console.log(`${pos}: ${player.name.padEnd(30)} ${player.hole} ${player.totalScore} | font=Menlo color=black \n`);
   })
   console.log('---');
-  console.log(`Full Leaderboard | href=${tournamentURL}`)
+  console.log('Full Leaderboard')
   
 }

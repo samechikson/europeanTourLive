@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node europeantour.1m.js",
+    "start": "node europeantour.10m.js",
     "watch": "npm-watch"
   },
   "watch": {
-    "start": "europeantour.1m.js"
+    "start": "europeantour.10m.js"
   },
   "author": "",
   "license": "ISC",
