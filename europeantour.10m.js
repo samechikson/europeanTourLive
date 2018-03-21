@@ -17,7 +17,7 @@ const nightmare = Nightmare()
 console.log('🏌🏼European Tour');
 console.log('---');
 
-const session = nightmare
+nightmare
   .goto(baseURL)
   .click('#LiveLeaderboardLink a')
   .wait('#leaderboard-table')
@@ -38,6 +38,9 @@ const session = nightmare
   .catch(error => {
     if (error.message.includes('.wait() for #leaderboard-table timed out after 30000msec')) {
       console.log('No Active Tournament | color=black');
+    } 
+    else if (error.message.includes('Unable to find element by selector: #LiveLeaderboardLink a')) {
+      console.log('No leaderboard this week');
     } else {
       console.error('Search failed:', error);
     }
